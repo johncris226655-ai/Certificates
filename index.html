@@ -9,63 +9,31 @@
     <style>
         :root { --paper: #fdfdfd; --ink: #000; }
         body { background: #1a1a1a; font-family: 'Times New Roman', serif; margin: 0; padding: 20px; color: #000; }
-        
-        /* UI Search Controls */
-        .search-area { 
-            max-width: 800px; margin: 0 auto 30px; text-align: center; 
-            background: #222; padding: 30px; border-radius: 8px; border: 1px solid #444;
-        }
-        .search-label { color: #00ff00; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 10px; display: block; }
-        input { 
-            width: 250px; padding: 15px; background: #000; border: 1px solid #00ff00; 
-            color: #00ff00; font-size: 1.5rem; text-align: center; outline: none;
-        }
-        .btn { 
-            padding: 15px 30px; background: #00ff00; color: #000; border: none; 
-            font-weight: bold; cursor: pointer; text-transform: uppercase; margin-left: 10px;
-        }
-        .btn-save { background: #fff; color: #000; margin-top: 15px; width: 100%; max-width: 400px; }
-
-        /* The Certificate Layout */
-        #doc-wrap { display: none; margin: 0 auto; }
-        #certificate {
-            width: 850px; min-height: 1100px; background: var(--paper);
-            margin: 0 auto; padding: 40px; box-sizing: border-box;
-            border: 2px solid #000; position: relative;
-        }
-
-        /* Watermark feel */
-        #certificate::after {
-            content: "OFFICIAL RECORD"; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 8rem; color: rgba(0,0,0,0.03); pointer-events: none; white-space: nowrap;
-        }
-
+        .search-area { max-width: 800px; margin: 0 auto 30px; text-align: center; background: #222; padding: 30px; border-radius: 8px; border: 1px solid #444; }
+        input { width: 200px; padding: 15px; background: #000; border: 1px solid #00ff00; color: #00ff00; font-size: 1.5rem; text-align: center; outline: none; }
+        .btn { padding: 15px 30px; background: #00ff00; color: #000; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        #doc-wrap { display: none; margin: 0 auto; padding-bottom: 50px; }
+        #certificate { width: 850px; min-height: 1100px; background: var(--paper); margin: 0 auto; padding: 50px; border: 2px solid #000; position: relative; box-sizing: border-box; }
+        #certificate::after { content: "OFFICIAL RECORD"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 8rem; color: rgba(0,0,0,0.03); pointer-events: none; white-space: nowrap; }
         .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 5px; margin-bottom: 15px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1.5px solid #000; }
         .cell { border: 0.5px solid #000; padding: 8px; font-size: 11px; min-height: 45px; }
         .label { display: block; font-weight: bold; font-size: 9px; text-transform: uppercase; color: #333; }
         .data { font-size: 15px; font-weight: bold; margin-top: 5px; text-transform: uppercase; font-family: Arial, sans-serif; }
-
         .medical-section { border: 1.5px solid #000; border-top: none; padding: 20px; }
-        .med-title { font-weight: bold; text-decoration: underline; font-size: 12px; margin-bottom: 10px; display: block; }
-        
         .sig-container { display: flex; justify-content: space-between; margin-top: 60px; padding: 0 40px; }
         .sig-box { text-align: center; width: 40%; }
-        .signature { 
-            font-size: 45px; height: 60px; display: block; margin-bottom: -15px;
-            color: #001f3f; opacity: 0.85; transform: rotate(-1deg);
-        }
+        .signature { font-size: 45px; height: 60px; display: block; margin-bottom: -15px; color: #001f3f; opacity: 0.85; }
         .line { border-top: 1px solid #000; padding-top: 5px; font-size: 11px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="search-area">
-        <span class="search-label">PLAYER IDENTITY CHECKER</span>
-        <input type="text" id="search-input" placeholder="00000" maxlength="5">
-        <button class="btn" onclick="searchRecord()">SEARCH</button><br>
-        <button class="btn btn-save" onclick="downloadDoc()">SAVE AS IMAGE (JPEG)</button>
+        <span style="color: #00ff00; display: block; margin-bottom: 10px;">IDENTITY CHECKER</span>
+        <input type="text" id="search-input" placeholder="CODE">
+        <button class="btn" onclick="searchRecord()">SEARCH</button>
+        <button class="btn" style="background: #fff; margin-left: 10px;" onclick="downloadDoc()">SAVE JPEG</button>
     </div>
 
     <div id="doc-wrap">
@@ -75,47 +43,30 @@
                 <p style="font-size: 13px; font-weight: bold; margin: 2px;">OFFICE OF THE CIVIL REGISTRAR GENERAL</p>
                 <h1 style="margin: 5px; font-size: 28px; letter-spacing: 2px;">CERTIFICATE OF DEATH</h1>
             </div>
-
             <div class="grid">
-                <div class="cell"><span class="label">Province</span><div class="data" id="d-prov">---</div></div>
-                <div class="cell"><span class="label">City/Municipality</span><div class="data" id="d-city">---</div></div>
-                <div class="cell"><span class="label">Registry No.</span><div class="data" id="d-reg">---</div></div>
-                
-                <div class="cell" style="grid-column: span 2;"><span class="label">1. Name of Deceased</span><div class="data" id="d-name">---</div></div>
-                <div class="cell"><span class="label">2. Sex</span><div class="data" id="d-gender">---</div></div>
-
-                <div class="cell"><span class="label">3. Date of Death</span><div class="data">APRIL 20, 2026</div></div>
-                <div class="cell"><span class="label">4. Date of Birth</span><div class="data" id="d-dob">---</div></div>
-                <div class="cell"><span class="label">5. Age at Death</span><div class="data" id="d-age">---</div></div>
+                <div class="cell"><span class="label">Province</span><div class="data" id="d-prov"></div></div>
+                <div class="cell"><span class="label">City/Municipality</span><div class="data" id="d-city"></div></div>
+                <div class="cell"><span class="label">Registry No.</span><div class="data" id="d-reg"></div></div>
+                <div class="cell" style="grid-column: span 2;"><span class="label">Name of Deceased</span><div class="data" id="d-name"></div></div>
+                <div class="cell"><span class="label">Sex</span><div class="data" id="d-gender"></div></div>
+                <div class="cell"><span class="label">Date of Death</span><div class="data">APRIL 20, 2026</div></div>
+                <div class="cell"><span class="label">Birthdate</span><div class="data" id="d-dob"></div></div>
+                <div class="cell"><span class="label">Age</span><div class="data" id="d-age"></div></div>
             </div>
-
             <div class="medical-section">
-                <span class="med-title">MEDICAL CERTIFICATE</span>
-                <p style="font-size: 14px; line-height: 1.8;">
-                    I hereby certify that I have attended the deceased and that death occurred on the date stated above, and that the cause of death was: <br>
-                    <span class="data" id="d-cause" style="font-style: italic; border-bottom: 1px dotted #000; display: inline-block; width: 100%;"></span>
-                </p>
-                <p style="font-size: 11px; margin-top: 10px;">Interval Between Onset and Death: <b>IMMEDIATE</b></p>
+                <b style="font-size: 12px; text-decoration: underline;">MEDICAL CERTIFICATE</b>
+                <p style="font-size: 14px; line-height: 1.8;">Cause of Death: <br><span class="data" id="d-cause" style="font-style: italic; border-bottom: 1px dotted #000; display: inline-block; width: 100%;"></span></p>
             </div>
-
             <div class="sig-container">
-                <div class="sig-box">
-                    <span class="signature" id="d-sig-doc"></span>
-                    <div class="line"><span id="d-doc-name">---</span><br>ATTENDING PHYSICIAN</div>
-                </div>
-                <div class="sig-box">
-                    <span class="signature" style="font-family: 'Mrs Saint Delafield', cursive;">A. Alcantara</span>
-                    <div class="line">ARTHUR E. ALCANTARA<br>CIVIL REGISTRAR</div>
-                </div>
+                <div class="sig-box"><span class="signature" id="d-sig-doc"></span><div class="line" id="d-doc-name"></div><div style="font-size: 9px;">ATTENDING PHYSICIAN</div></div>
+                <div class="sig-box"><span class="signature" style="font-family: 'Mrs Saint Delafield', cursive;">A. Alcantara</span><div class="line">ARTHUR E. ALCANTARA</div><div style="font-size: 9px;">CIVIL REGISTRAR</div></div>
             </div>
         </div>
     </div>
 
 <script>
-    // 100+ Realistic Causes of Death
-    const causes = ["Acute Myocardial Infarction", "Septic Shock secondary to Pneumonia", "Multiple Organ Failure", "Cerebrovascular Accident (Hemorrhagic)", "Cardiopulmonary Arrest", "Hypovolemic Shock", "Pulmonary Embolism", "Acute Renal Failure", "Decompensated Liver Cirrhosis", "Diabetic Ketoacidosis", "Status Asthmaticus", "Aortic Aneurysm Rupture", "Bacterial Meningitis", "Anaphylactic Shock", "Heat Stroke with Hyperthermia", "Dengue Shock Syndrome", "Severe Electrolyte Imbalance", "Miliary Tuberculosis", "Coronary Artery Disease", "Malignant Neoplasm of Lung", "Acute Pancreatitis", "Septicemia", "Congestive Heart Failure", "Respiratory Failure Type II", "Status Epilepticus", "Brain Herniation", "Intracerebral Hemorrhage", "Asphyxia secondary to Choking", "Poisoning by Organophosphate", "Chronic Kidney Disease Stage V", "Gastric Ulcer Perforation", "Aortic Dissection", "Myocardial Ischemia", "Ventricular Fibrillation", "Bacteremia", "Hypertensive Heart Disease", "Valvular Heart Disease", "Septic Encephalopathy", "Metastatic Adenocarcinoma", "Acute Gastritis with Bleeding", "Liver Cancer Stage IV", "Lymphoma Complications", "Renal Cell Carcinoma", "Osteosarcoma Complications", "Pancreatic Cancer", "Esophageal Cancer", "Bladder Carcinoma", "Myasthenic Crisis", "Leukemia Complications", "Aplastic Anemia", "Pulmonary Edema", "COPD Exacerbation", "Pneumothorax", "Gastrointestinal Hemorrhage", "Acute Cholecystitis", "Mesenteric Ischemia", "Peritonitis", "Adrenal Crisis", "Thyroid Storm", "Uremic Encephalopathy", "Encephalitis", "Tetanus Complications", "Sepsis secondary to UTI", "Burn Shock", "Drowning secondary to Spasm", "Electrocution", "Hypothermia Complications", "Alcoholic Ketoacidosis", "Drug Overdose", "Cerebral Edema", "Ischemic Stroke", "Aspiration Pneumonia", "Cardiac Tamponade", "Pleural Effusion Complications", "Infective Endocarditis", "Rheumatic Heart Disease", "Mitral Valve Prolapse Complications", "Atrial Fibrillation", "Sickle Cell Crisis", "Thalassemia Major Complications", "Amyloidosis", "Scleroderma", "Lupus Nephritis", "Rheumatoid Arthritis Complications", "Parkinson's Disease Complications", "Alzheimer's Disease", "Huntington's Disease", "ALS Complications", "Guillain-Barre Syndrome", "Multiple Sclerosis Complications", "Brugada Syndrome", "Sudden Adult Death Syndrome", "Anorexia Complications", "Bulimia Complications", "Ischemic Bowel Disease", "Splenic Rupture", "Appendicitis with Perforation", "Choledocholithiasis", "Fulminant Hepatitis", "Rabies Complications", "Typhoid Fever Complications"];
+    const causes = ["Acute Myocardial Infarction", "Septic Shock", "Multiple Organ Failure", "Cerebrovascular Accident", "Cardiopulmonary Arrest", "Hypovolemic Shock", "Pulmonary Embolism", "Acute Renal Failure", "Decompensated Liver Cirrhosis", "Diabetic Ketoacidosis", "Status Asthmaticus", "Aortic Aneurysm Rupture", "Bacterial Meningitis", "Anaphylactic Shock", "Heat Stroke", "Dengue Shock Syndrome", "Severe Electrolyte Imbalance", "Miliary Tuberculosis", "Coronary Artery Disease", "Malignant Neoplasm of Lung", "Acute Pancreatitis", "Septicemia", "Congestive Heart Failure", "Respiratory Failure", "Status Epilepticus", "Brain Herniation", "Intracerebral Hemorrhage", "Asphyxia secondary to Choking", "Poisoning by Organophosphate", "Chronic Kidney Disease", "Gastric Ulcer Perforation", "Aortic Dissection", "Myocardial Ischemia", "Ventricular Fibrillation", "Bacteremia", "Hypertensive Heart Disease", "Valvular Heart Disease", "Septic Encephalopathy", "Metastatic Adenocarcinoma", "Acute Gastritis", "Liver Cancer Stage IV", "Lymphoma", "Renal Cell Carcinoma", "Osteosarcoma", "Pancreatic Cancer", "Esophageal Cancer", "Bladder Carcinoma", "Myasthenic Crisis", "Leukemia", "Aplastic Anemia", "Pulmonary Edema", "COPD Exacerbation", "Pneumothorax", "Gastrointestinal Hemorrhage", "Acute Cholecystitis", "Mesenteric Ischemia", "Peritonitis", "Adrenal Crisis", "Thyroid Storm", "Uremic Encephalopathy", "Encephalitis", "Tetanus", "Sepsis secondary to UTI", "Burn Shock", "Drowning", "Electrocution", "Hypothermia", "Alcoholic Ketoacidosis", "Drug Overdose", "Cerebral Edema", "Ischemic Stroke", "Aspiration Pneumonia", "Cardiac Tamponade", "Pleural Effusion", "Infective Endocarditis", "Rheumatic Heart Disease", "Mitral Valve Prolapse", "Atrial Fibrillation", "Sickle Cell Crisis", "Thalassemia Major", "Amyloidosis", "Scleroderma", "Lupus Nephritis", "Rheumatoid Arthritis", "Parkinson's Disease", "Alzheimer's Disease", "Huntington's Disease", "ALS Complications", "Guillain-Barre Syndrome", "Multiple Sclerosis", "Brugada Syndrome", "Sudden Adult Death Syndrome", "Anorexia Complications", "Bulimia Complications", "Ischemic Bowel Disease", "Splenic Rupture", "Appendicitis", "Choledocholithiasis", "Fulminant Hepatitis", "Rabies", "Typhoid Fever"];
 
-    // 100+ Doctor Names
     const doctors = ["Dr. Jose Rizalito Jr.", "Dr. Maria Clara Santos", "Dr. Antonio V. Luna", "Dr. Teresa M. Magbanua", "Dr. Emilio B. Aguinaldo", "Dr. Marcelo H. Del Pilar", "Dr. Gregorio S. Del Pilar", "Dr. Melchora A. Aquino", "Dr. Apolinario M. Mabini", "Dr. Diego S. Silang", "Dr. Gabriela R. Silang", "Dr. Juan K. Luna", "Dr. Mariano N. Ponce", "Dr. Andres B. Bonifacio", "Dr. Graciano L. Jaena", "Dr. Francisco M. Balagtas", "Dr. Manuel L. Quezon", "Dr. Sergio O. Osmeña", "Dr. Jose P. Laurel", "Dr. Ramon M. Magsaysay", "Dr. Carlos P. Garcia", "Dr. Diosdado P. Macapagal", "Dr. Ferdinand E. Marcos", "Dr. Corazon C. Aquino", "Dr. Fidel V. Ramos", "Dr. Joseph E. Estrada", "Dr. Gloria M. Arroyo", "Dr. Benigno S. Aquino III", "Dr. Rodrigo R. Duterte", "Dr. Leni G. Robredo", "Dr. Vicente S. Sotto", "Dr. Jovito R. Salonga", "Dr. Miriam D. Santiago", "Dr. Raul S. Roco", "Dr. Juan M. Flavier", "Dr. Franklin M. Drilon", "Dr. Pia S. Cayetano", "Dr. Loren B. Legarda", "Dr. Richard J. Gordon", "Dr. Francis G. Pangilinan", "Dr. Bam S. Aquino", "Dr. Risa N. Hontiveros", "Dr. Chel I. Diokno", "Dr. Vico N. Sotto", "Dr. Isko M. Moreno", "Dr. Gringo B. Honasan", "Dr. Panfilo M. Lacson", "Dr. Bong S. Go", "Dr. Manny D. Pacquiao", "Dr. Chiz G. Escudero", "Dr. Sonny M. Angara", "Dr. Grace L. Poe", "Dr. Nancy S. Binay", "Dr. Cynthia A. Villar", "Dr. Mark A. Villar", "Dr. Imee R. Marcos", "Dr. Robin C. Padilla", "Dr. Raffy T. Tulfo", "Dr. Jinggoy E. Estrada", "Dr. Bong Revilla Jr.", "Dr. Lito M. Lapid", "Dr. Ralph G. Recto", "Dr. Vilma S. Recto", "Dr. Herbert M. Bautista", "Dr. Lucy T. Gomez", "Dr. Richard I. Gomez", "Dr. Alfred V. Vargas", "Dr. Tito S. Sotto", "Dr. Joey G. De Leon", "Dr. Vic S. Sotto", "Dr. Dolphy R. Quizon", "Dr. Eddie S. Garcia", "Dr. Nora C. Aunor", "Dr. Sharon G. Cuneta", "Dr. Lea M. Salonga", "Dr. Gary V. Valenciano", "Dr. Martin N. Nievera", "Dr. Regine V. Alcasid", "Dr. Ogie J. Alcasid", "Dr. Piolo J. Pascual", "Dr. Coco M. Martin", "Dr. Dingdong F. Dantes", "Dr. Marian R. Dantes", "Dr. Anne C. Smith", "Dr. Vice G. Viceral", "Dr. Kathryn C. Bernardo", "Dr. Daniel J. Padilla", "Dr. Liza M. Soberano", "Dr. Enrique J. Gil", "Dr. James R. Reid", "Dr. Nadine S. Lustre", "Dr. Gerald R. Anderson", "Dr. Kim C. Chiu", "Dr. Angel L. Locsin", "Dr. Bea A. Alonzo", "Dr. John Lloyd S. Cruz", "Dr. Derek P. Ramsay", "Dr. Solenn M. Heussaff"];
 
     const sigFonts = ["'Dancing Script', cursive", "'Mrs Saint Delafield', cursive", "'Monsieur La Doulaise', cursive", "'Herr Von Muellerhoff', cursive"];
@@ -123,16 +74,9 @@
     function searchRecord() {
         const code = document.getElementById('search-input').value;
         const data = localStorage.getItem('player_' + code);
-
-        if(!data) {
-            alert("NO RECORD FOUND IN CIVIL REGISTRY.");
-            return;
-        }
-
+        if(!data) { alert("NO RECORD FOUND."); return; }
         const p = JSON.parse(data);
         document.getElementById('doc-wrap').style.display = 'block';
-
-        // Sync Data
         document.getElementById('d-name').innerText = p.p_name;
         document.getElementById('d-prov').innerText = p.p_province;
         document.getElementById('d-city').innerText = p.p_city;
@@ -140,32 +84,23 @@
         document.getElementById('d-age').innerText = p.p_age + " YEARS OLD";
         document.getElementById('d-gender').innerText = p.p_gender;
         document.getElementById('d-reg').innerText = "2026-" + code;
-
-        // Generate Random Medical Data (100+ Selection)
-        const randomCause = causes[Math.floor(Math.random() * causes.length)];
-        const randomDoc = doctors[Math.floor(Math.random() * doctors.length)];
-        const randomFont = sigFonts[Math.floor(Math.random() * sigFonts.length)];
-
-        document.getElementById('d-cause').innerText = randomCause;
-        document.getElementById('d-doc-name').innerText = randomDoc.toUpperCase();
-        
-        const sigElement = document.getElementById('d-sig-doc');
-        sigElement.style.fontFamily = randomFont;
-        // Messy Signature: Get first/last name only
-        const nameParts = randomDoc.split(' ');
-        sigElement.innerText = nameParts[1] + " " + (nameParts[2] || "");
+        document.getElementById('d-cause').innerText = causes[Math.floor(Math.random() * causes.length)].toUpperCase();
+        const rDoc = doctors[Math.floor(Math.random() * doctors.length)];
+        document.getElementById('d-doc-name').innerText = rDoc.toUpperCase();
+        const sig = document.getElementById('d-sig-doc');
+        sig.style.fontFamily = sigFonts[Math.floor(Math.random() * sigFonts.length)];
+        sig.innerText = rDoc.split(' ')[1];
+        window.scrollTo({ top: document.getElementById('doc-wrap').offsetTop, behavior: 'smooth' });
     }
 
     function downloadDoc() {
-        const doc = document.getElementById('certificate');
-        html2canvas(doc, { scale: 2 }).then(canvas => {
+        html2canvas(document.getElementById('certificate'), { scale: 2 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'DEATH_CERTIFICATE_RECORD.jpg';
+            link.download = 'DEATH_RECORD.jpg';
             link.href = canvas.toDataURL("image/jpeg", 0.9);
             link.click();
         });
     }
 </script>
 </body>
-                  </html>
-
+</html>
